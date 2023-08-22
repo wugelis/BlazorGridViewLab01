@@ -1,0 +1,46 @@
+﻿@using MingChi.Domain.CRMs
+
+@page "/"
+@using BlazorGridViewLab1.Client.Components
+@using System.Text.Json
+@using System.Text.Json.Serialization
+
+<PageTitle>Index</PageTitle>
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+<SurveyPrompt Title="How is Blazor working for you?" />
+
+<p>
+    <MyButton3Class ButtonText="取得資料" OnClickCallback="GetData"></MyButton3Class>
+</p>
+<p>
+    <GridView DataSource="_customers">
+        <Columns>
+            <GridViewItem ColumnName="CustomerID"/>
+            <GridViewItem ColumnName="ContactName"/>
+            <GridViewItem ColumnName="ContactTitle"/>
+            <GridViewItem ColumnName="CompanyName" />
+            <GridViewItem ColumnName="Address" />
+            <GridViewItem ColumnName="Country" />
+        </Columns>
+    </GridView>
+</p>
+
+@code {
+
+    Customer[]? _customers;
+
+    async Task GetData()
+    {
+        HttpClient client = new HttpClient(); 
+        client.BaseAddress = new Uri("https://localhost:7147/");
+        _customers = await client.GetFromJsonAsync<Customer[]>(
+            "api/Customer/GetCustomers", 
+            new JsonSerializerOptions() { 
+                NumberHandling = JsonNumberHandling.AllowReadingFromString, 
+                PropertyNameCaseInsensitive = true });
+    }
+}

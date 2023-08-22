@@ -1,0 +1,48 @@
+﻿@using MingChi.Domain.CRMs
+
+<table border="1" class="table table-primary">
+    <thead>
+        <tr>
+            @ChildContent
+        </tr>
+    </thead>
+    <tbody>
+        @if (_dataSource == null)
+        {
+            <p>
+                No Data
+            </p>
+        }
+        else
+        {
+            @foreach (Customer row in _dataSource)
+            {
+                <tr>
+                    <td>@row.CustomerId</td>
+                    <td>@row.ContactName</td>
+                    <td>@row.ContactTitle</td>
+                    <td>@row.CompanyName</td>
+                    <td>@row.Address</td>
+                    <td>@row.Country</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+@code {
+
+    object[] _dataSource;
+
+    [Parameter] public RenderFragment ChildContent { get; set; }
+
+    [Parameter] public object[] DataSource { get; set; }
+
+    protected override Task OnParametersSetAsync()
+    {
+        _dataSource = DataSource;
+
+        return base.OnParametersSetAsync();
+    }
+
+}
